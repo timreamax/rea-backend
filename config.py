@@ -1,4 +1,4 @@
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     ALLOWED_ORIGINS = [
@@ -7,4 +7,9 @@ class Settings(BaseSettings):
         "http://localhost:5173",
     ]
 
+    class Config:
+        env_file = ".env"
+        extra = "ignore"
+
 settings = Settings()
+
