@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 from models import PageStructure, SectionData
 
+
 def scrape_page(url: str) -> PageStructure:
     resp = requests.get(url, timeout=20)
     resp.raise_for_status()
@@ -14,22 +15,18 @@ def scrape_page(url: str) -> PageStructure:
 
     for sec in soup.find_all(["section", "div"], recursive=True):
         text = sec.get_text(" ", strip=True)
-        if not text or len(text) < 40:
+        if not text or len(text) < 30:
             continue
 
         images = [
             urljoin(url, img["src"])
-            for img in sec.find_all("img")
-            if img.get("src")
+            for img in sec.find_all("img", src=True)
         ]
 
         sections.append(
-            SectionData(
-                html=str(sec),
-                text=text,
-                images=images
-            )
+            SectionData(html=str(sec), text=text, images=images)
         )
+
         if len(sections) >= 12:
             break
 
