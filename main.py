@@ -7,7 +7,7 @@ from scraper import scrape_page
 from elementor_builder import build_elementor_data
 from wp_client import create_elementor_page
 
-app = FastAPI(title="Rea AutoCloner API", version="0.1")
+app = FastAPI(title="Rea AutoCloner API", version="1.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -45,4 +45,4 @@ def clone(req: CloneRequest):
             wp_page_url=wp_url,
         )
     except Exception as e:
-        raise HTTPException(500, f"Error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
